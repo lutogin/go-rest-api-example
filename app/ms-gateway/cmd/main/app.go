@@ -2,7 +2,7 @@ package main
 
 import (
 	"ms-gateway/internal/user"
-	"ms-gateway/package/logging"
+	"ms-gateway/pkg/logging"
 	"net"
 	"net/http"
 	"time"
@@ -15,14 +15,12 @@ func main() {
 
 	logger.Infoln("Register routers.")
 	router := httprouter.New()
-	(user.New()).Register(router)
+	(user.NewHandler(logger)).Register(router)
 
-	start(router)
+	start(router, logger)
 }
 
-func start(router *httprouter.Router) {
-	logger := logging.GetLogger()
-
+func start(router *httprouter.Router, logger logging.Logger) {
 	logger.Infoln("Start application.")
 
 	listener, err := net.Listen("tcp", ":8080")

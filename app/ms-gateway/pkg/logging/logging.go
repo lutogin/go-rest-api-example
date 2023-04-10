@@ -3,7 +3,7 @@ package logging
 import (
 	"fmt"
 	"io"
-	"ms-gateway/package/common"
+	"ms-gateway/pkg/common"
 	"os"
 	"path"
 	"runtime"

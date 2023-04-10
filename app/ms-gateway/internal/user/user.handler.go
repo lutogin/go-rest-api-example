@@ -2,12 +2,14 @@ package user
 
 import (
 	"ms-gateway/internal/handlers"
+	"ms-gateway/pkg/logging"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
 
 type handler struct {
+	logger logging.Logger
 }
 
 const (
@@ -15,8 +17,8 @@ const (
 	userURL  = "/users/:id"
 )
 
-func New() handlers.Handler {
-	return &handler{}
+func NewHandler(logger logging.Logger) handlers.Handler {
+	return &handler{logger: logger}
 }
 
 func (h *handler) Register(router *httprouter.Router) {
@@ -26,6 +28,7 @@ func (h *handler) Register(router *httprouter.Router) {
 	router.PUT(userURL, h.UpdateOrCreate)
 	router.PATCH(userURL, h.Update)
 	router.DELETE(userURL, h.Delete)
+	h.logger.Infoln("User's handler is initialized.")
 }
 
 func (h *handler) GetAll(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
