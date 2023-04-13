@@ -9,7 +9,7 @@ import (
 )
 
 type handler struct {
-	logger logging.Logger
+	logger *logging.Logger
 }
 
 const (
@@ -17,7 +17,7 @@ const (
 	userURL  = "/users/:id"
 )
 
-func NewHandler(logger logging.Logger) handlers.Handler {
+func NewHandler(logger *logging.Logger) handlers.Handler {
 	return &handler{logger: logger}
 }
 

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"ms-gateway/config"
 	"ms-gateway/internal/user"
 	"ms-gateway/pkg/logging"
 	"net"
@@ -13,17 +15,19 @@ import (
 func main() {
 	logger := logging.GetLogger()
 
+	cfg := config.GetConfig()
+
 	logger.Infoln("Register routers.")
 	router := httprouter.New()
 	(user.NewHandler(logger)).Register(router)
 
-	start(router, logger)
+	start(router, logger, cfg)
 }
 
-func start(router *httprouter.Router, logger logging.Logger) {
+func start(router *httprouter.Router, logger *logging.Logger, cfg *config.Config) {
 	logger.Infoln("Start application.")
 
-	listener, err := net.Listen("tcp", ":8080")
+	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%s", cfg.Listen.Host, cfg.Listen.Port))
 
 	if err != nil {
 		panic(err)
@@ -35,7 +39,7 @@ func start(router *httprouter.Router, logger logging.Logger) {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	logger.Infoln("Server is started at 8080 port.")
+	logger.Infoln(fmt.Sprintf("Server is started at %s port.", cfg.Listen.Port))
 
 	panic(server.Serve(listener))
 }

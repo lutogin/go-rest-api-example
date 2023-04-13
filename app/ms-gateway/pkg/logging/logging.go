@@ -36,12 +36,12 @@ type Logger struct { // create a class with logger
 	*logrus.Entry
 }
 
-func GetLogger() Logger {
-	return Logger{e}
+func GetLogger() *Logger {
+	return &Logger{e}
 }
 
-func (l *Logger) GetLoggerWithFields(k string, v interface{}) Logger {
-	return Logger{l.WithField(k, v)}
+func (l *Logger) GetLoggerWithFields(k string, v interface{}) *Logger {
+	return &Logger{l.WithField(k, v)}
 }
 
 func init() { //@notice if init with small "i" this is function will be run automatically when somewhere will be import this module
