@@ -15,16 +15,17 @@ type Config struct {
 	} `yaml:"listen"`
 }
 
-// var instance *Config
-var once = sync.Once{} // for parsing this file just once
+var (
+	instance *Config
+	once     sync.Once
+)
 
 func GetConfig() *Config {
-	instance := &Config{}
-
 	once.Do(func() { // do it once. Singleton pattern
 		logger := logging.GetLogger()
 
 		logger.Infoln("Read application's config.")
+		instance = &Config{}
 
 		if err := cleanenv.ReadConfig("config.yml", instance); err != nil {
 			help, _ := cleanenv.GetDescription(instance, nil)
