@@ -19,52 +19,49 @@ type db struct {
 
 func (d *db) Create(ctx context.Context, payload userDto.CreateUserDto) (id string, err error) {
 	result, err := d.collection.InsertOne(ctx, payload)
-
 	if err != nil {
 		return "", err
 	}
-
 	oid, ok := result.InsertedID.(primitive.ObjectID)
-
 	if !ok {
 		errMsg := "error during getti ng oid"
 		d.logger.Errorln(errMsg)
 		d.logger.Traceln(payload)
-
 		return "", errors.New(errMsg)
 	}
-
 	return oid.Hex(), nil
 }
 
-func (d *db) GetById(ctx context.Context, payload userDto.GetUserByIdDto) (u user.UserEntity, err error) {
+func (d *db) GetById(ctx context.Context, payload userDto.GetUserByIdDto) (user user.UserEntity, err error) {
 	oid, err := primitive.ObjectIDFromHex(payload.ID)
-
 	if err != nil {
-		return u, err
+		return user, err
 	}
-
 	filter := bson.M{"_id": oid}
-
 	result := d.collection.FindOne(ctx, filter)
-
 	if err = result.Err(); err != nil {
 		d.logger.Errorf("Error during looking for user by id: %s /n", payload.ID)
 		d.logger.Traceln(payload.ID)
-
-		return u, err
+		return user, err
 	}
-
-	if err = result.Decode(&u); err != nil {
-		return u, err
+	if err = result.Decode(&user); err != nil {
+		return user, err
 	}
-
-	return u, nil
+	return user, nil
 }
 
-func (d *db) GetAll(ctx context.Context, payload userDto.GetUsersDto) (user []user.UserEntity, err error) {
-	//TODO implement me
-	panic("implement me")
+func (d *db) GetByFilter(ctx context.Context, payload userDto.GetUsersDto) (user []user.UserEntity, err error) {
+	filter := bson.M{payload}
+	cursor, err := d.collection.Find(ctx, filter)
+	if err != nil {
+		d.logger.Errorf("Error during looking for user by filter: %s /n", payload)
+		d.logger.Traceln(payload)
+		return user, err
+	}
+	if err = cursor.Decode(&user); err != nil {
+		return u, err
+	}
+	return u, nil
 }
 
 func (d *db) Update(ctx context.Context, payload userDto.UpdateUserDto) (user user.UserEntity, err error) {

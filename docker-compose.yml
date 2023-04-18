@@ -14,3 +14,19 @@ services:
       MONGO_HOST: mongo
     env_file:
       - ./app/ms-gateway/.env.dev
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:4-focal
+    container_name: go-api-mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Password1
+      MONGO_USERNAME: user
+      MONGO_PASSWORD: password1
+    volumes:
+      - './init-mongodb.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro'

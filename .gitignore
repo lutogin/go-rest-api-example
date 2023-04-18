@@ -1,3 +1,5 @@
+./app/ms-gateway/config.yml
+
 tmp/
 ### Diff template
 *.patch
