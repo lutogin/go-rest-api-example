@@ -28,7 +28,7 @@ type ConfigEnv struct {
 	Host           string `yaml:"host" env:"HOST" env-default:"8181"`
 	Port           string `yaml:"port" env:"PORT" env-default:"127.0.0.1"`
 	MongoHost      string `env:"MONGO_HOST"`
-	MongoHort      string `env:"MONGO_PORT"`
+	MongoPort      string `env:"MONGO_PORT"`
 	MongoUser      string `env:"MONGO_USER"`
 	MongoPassword  string `env:"MONGO_PASSWORD"`
 	MongoDatabase  string `env:"MONGO_DATABASE"`

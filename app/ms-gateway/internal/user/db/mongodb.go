@@ -137,7 +137,7 @@ func (d *db) Delete(ctx context.Context, payload userDto.DeleteUserDto) (err err
 	return nil
 }
 
-func NewRepository(database mongo.Database, collection string, logger *logging.Logger) user.Repository {
+func NewRepository(database *mongo.Database, collection string, logger *logging.Logger) user.Repository {
 	return &db{
 		collection: database.Collection(collection),
 		logger:     logger,

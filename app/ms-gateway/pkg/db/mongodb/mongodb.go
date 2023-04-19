@@ -1,4 +1,4 @@
-package mongodb
+package mng
 
 import (
 	"context"
@@ -11,29 +11,29 @@ import (
 )
 
 type MongoConnectOpt struct {
-	ctx      context.Context
-	host     string
-	port     string
-	user     string // optional field
-	password string // optional field
-	database string
-	auth     string
+	Ctx      context.Context
+	Host     string
+	Port     string
+	User     string // optional field
+	Password string // optional field
+	Database string
+	Auth     string
 }
 
 func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
 	var mongoConnect string
 
-	if opt.user != "" && opt.password != "" {
+	if opt.User != "" && opt.Password != "" {
 		mongoConnect = fmt.Sprintf("mongodb://%s:%s@%s:%s",
-			opt.user,
-			opt.password,
-			opt.host,
-			opt.port,
+			opt.User,
+			opt.Password,
+			opt.Host,
+			opt.Port,
 		)
 	} else {
 		mongoConnect = fmt.Sprintf("mongodb://%s:%s",
-			opt.host,
-			opt.port,
+			opt.Host,
+			opt.Port,
 		)
 	}
 
@@ -56,5 +56,5 @@ func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
 		return nil, errors.New(fmt.Sprintf("Failed to ping mongoDB: %v", err))
 	}
 
-	return client.Database(opt.database), nil
+	return client.Database(opt.Database), nil
 }
