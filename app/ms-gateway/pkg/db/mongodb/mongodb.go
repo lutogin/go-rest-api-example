@@ -42,11 +42,11 @@ func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoConnect))
 
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
+	//defer func() {
+	//	if err = client.Disconnect(ctx); err != nil {
+	//		panic(err)
+	//	}
+	//}()
 
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Failed to connect mongoDB: %v", err))
