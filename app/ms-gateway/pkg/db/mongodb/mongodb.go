@@ -4,36 +4,42 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"ms-gateway/pkg/logging"
+	"time"
 )
 
 type MongoConnectOpt struct {
-	Ctx      context.Context
-	Host     string
-	Port     string
-	User     string // optional field
-	Password string // optional field
-	Database string
-	Auth     string
+	Host      string
+	Port      string
+	User      string // optional field
+	Password  string // optional field
+	Database  string
+	UriScheme string
 }
 
-func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
+func NewClient(opt MongoConnectOpt, logger *logging.Logger) (db *mongo.Database, err error) {
 	var mongoConnect string
 
+	suffix := "?retryWrites=true&w=majority"
 	if opt.User != "" && opt.Password != "" {
-		mongoConnect = fmt.Sprintf("mongodb://%s:%s@%s:%s",
+		mongoConnect = fmt.Sprintf("%s://%s:%s@%s:%s/%s%s",
+			opt.UriScheme,
 			opt.User,
 			opt.Password,
 			opt.Host,
 			opt.Port,
+			opt.Database,
+			suffix,
 		)
 	} else {
-		mongoConnect = fmt.Sprintf("mongodb://%s:%s",
+		mongoConnect = fmt.Sprintf("%s://%s:%s/%s%s",
+			opt.UriScheme,
 			opt.Host,
 			opt.Port,
+			opt.Database,
+			suffix,
 		)
 	}
 
@@ -43,6 +49,7 @@ func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoConnect))
 
 	//defer func() {
+	//	logger.Infoln("Disconnected from mongo.")
 	//	if err = client.Disconnect(ctx); err != nil {
 	//		panic(err)
 	//	}
@@ -55,6 +62,7 @@ func NewClient(opt MongoConnectOpt) (db *mongo.Database, err error) {
 	if err = client.Ping(ctx, nil); err != nil {
 		return nil, errors.New(fmt.Sprintf("Failed to ping mongoDB: %v", err))
 	}
+	logger.Infoln("Connected to mongo successfully")
 
 	return client.Database(opt.Database), nil
 }

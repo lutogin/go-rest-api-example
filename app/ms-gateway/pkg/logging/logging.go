@@ -56,10 +56,10 @@ func init() { //@notice if init with small "i" this is function will be run auto
 
 	l.SetFormatter(formatter)
 
-	err := os.MkdirAll("logs", 0644)
+	err := os.MkdirAll("logs", 0777)
 	common.CriticalErrorHandler(err)
 
-	file, err := os.OpenFile("logs/logs.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	file, err := os.OpenFile("logs/logs.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
 	common.CriticalErrorHandler(err)
 
 	defer file.Close()

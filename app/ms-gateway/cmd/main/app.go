@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"ms-gateway/config"
 	"ms-gateway/internal/user"
@@ -20,22 +19,23 @@ func main() {
 	cfg := config.GetConfig()
 
 	clientOpts := mng.MongoConnectOpt{
-		Ctx:      context.Background(),
-		User:     cfg.MongoUser,
-		Password: cfg.MongoPassword,
-		Host:     cfg.MongoHost,
-		Port:     cfg.MongoPort,
-		Database: cfg.MongoDatabase,
+		User:      cfg.MongoUser,
+		Password:  cfg.MongoPassword,
+		Host:      cfg.MongoHost,
+		Port:      cfg.MongoPort,
+		Database:  cfg.MongoDatabase,
+		UriScheme: cfg.MongoUriScheme,
 	}
 
-	client, err := mng.NewClient(clientOpts)
+	client, err := mng.NewClient(clientOpts, logger)
 	if err != nil {
 		panic(err)
 	}
-	db.NewRepository(client, "users", logger)
-	logger.Infoln("Register routers.")
+	userRepo := db.NewRepository(client, "users", logger)
+	service := user.NewService(userRepo, logger)
+	logger.Infoln("Registering routers.")
 	router := httprouter.New()
-	(user.NewHandler(logger)).Register(router)
+	(user.NewHandler(service, logger)).Register(router)
 
 	start(router, logger, cfg)
 }

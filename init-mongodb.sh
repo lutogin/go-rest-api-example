@@ -9,7 +9,7 @@ requests.createUser({
   pwd: '$MONGO_PASSWORD',
   roles: [{
     role: 'readWrite',
-    db: 'search-requests'
+    db: 'users'
   }]
 })
 EOF

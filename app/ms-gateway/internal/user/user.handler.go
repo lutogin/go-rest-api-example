@@ -1,15 +1,19 @@
 package user
 
 import (
+	"context"
+	"encoding/json"
+	"github.com/julienschmidt/httprouter"
 	"ms-gateway/internal/handlers"
+	userDto "ms-gateway/internal/user/dto"
 	"ms-gateway/pkg/logging"
 	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"time"
 )
 
 type handler struct {
-	logger *logging.Logger
+	service *Service
+	logger  *logging.Logger
 }
 
 const (
@@ -17,8 +21,8 @@ const (
 	userURL  = "/users/:id"
 )
 
-func NewHandler(logger *logging.Logger) handlers.Handler {
-	return &handler{logger: logger}
+func NewHandler(service *Service, logger *logging.Logger) handlers.Handler {
+	return &handler{service: service, logger: logger}
 }
 
 func (h *handler) Register(router *httprouter.Router) {
@@ -42,8 +46,25 @@ func (h *handler) GetById(w http.ResponseWriter, r *http.Request, params httprou
 }
 
 func (h *handler) Create(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var payload userDto.CreateUserDto
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	id, err := h.service.Create(ctx, payload)
+	if err != nil {
+		h.logger.Errorln(err)
+		http.Error(w, "Something was wrong.", http.StatusExpectationFailed)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("CreateUser"))
+	w.Write([]byte(id))
 }
 
 func (h *handler) UpdateOrCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
