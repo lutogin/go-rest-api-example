@@ -28,7 +28,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: Password1
-      MONGO_USERNAME: user
+      MONGO_USERNAME: users
       MONGO_PASSWORD: password1
       MONGO_HOST: mongodb
     volumes:

@@ -50,8 +50,8 @@ func NewClient(opt MongoConnectOpt, logger *logging.Logger) (db *mongo.Database,
 
 	//defer func() {
 	//	logger.Infoln("Disconnected from mongo.")
-	//	if err = client.Disconnect(ctx); err != nil {
-	//		panic(err)
+	//	if app-errors = client.Disconnect(ctx); app-errors != nil {
+	//		panic(app-errors)
 	//	}
 	//}()
 

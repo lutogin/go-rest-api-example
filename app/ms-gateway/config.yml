@@ -6,7 +6,7 @@ listen:
 mongo:
   mongo_host: go-api-mongodb
   mongo_port: 27017
-  mongo_user: user
+  mongo_user: users
   mongo_password: password1
   mongo_database: users
   mongo_uri_scheme: mongodb

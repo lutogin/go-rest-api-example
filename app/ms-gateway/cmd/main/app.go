@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"ms-gateway/config"
-	"ms-gateway/internal/user"
-	"ms-gateway/internal/user/db"
+	"ms-gateway/internal/users"
+	"ms-gateway/internal/users/db"
 	"ms-gateway/pkg/db/mongodb"
 	"ms-gateway/pkg/logging"
 	"net"
@@ -32,10 +32,10 @@ func main() {
 		panic(err)
 	}
 	userRepo := db.NewRepository(client, "users", logger)
-	service := user.NewService(userRepo, logger)
+	service := users.NewService(userRepo, logger)
 	logger.Infoln("Registering routers.")
 	router := httprouter.New()
-	(user.NewHandler(service, logger)).Register(router)
+	(users.NewHandler(service, logger)).Register(router)
 
 	start(router, logger, cfg)
 }

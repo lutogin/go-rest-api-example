@@ -47,11 +47,11 @@ func GetConfig() *ConfigEnv {
 		logger.Infoln("Read application's config.")
 		instance = &ConfigEnv{}
 
-		//if err := cleanenv.ReadConfig("config.yml", instance); err != nil {
+		//if app-errors := cleanenv.ReadConfig("config.yml", instance); app-errors != nil {
 		if err := cleanenv.ReadEnv(instance); err != nil {
 			//help, _ := cleanenv.GetDescription(instance, nil)
 
-			//logger.Fatalln(err)
+			//logger.Fatalln(app-errors)
 			//logger.Fatalln(help)
 		}
 	})
