@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"ms-gateway/config"
-	"ms-gateway/internal/users"
-	"ms-gateway/internal/users/db"
-	"ms-gateway/pkg/db/mongodb"
-	"ms-gateway/pkg/logging"
+	"ms-users/config"
+	"ms-users/internal/users"
+	"ms-users/internal/users/db"
+	"ms-users/pkg/logging"
 	"net"
 	"net/http"
 	"time"

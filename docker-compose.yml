@@ -1,10 +1,10 @@
 version: "3.9"
 
 services:
-  go-gateway:
-    container_name: go-gateway
+  ms-users:
+    container_name: go-ms-users
     build:
-      context: ./app/ms-gateway
+      context: app/ms-users
       dockerfile: Dockerfile_dev
     ports:
       - "8181:8080"
@@ -12,10 +12,10 @@ services:
     environment:
       GOTRACEBACK: all
     volumes:
-      - ./app/ms-gateway:/app
+      - ./app/ms-users:/app
 
     env_file:
-      - ./app/ms-gateway/.env.dev
+      - app/ms-users/.env.local
     depends_on:
       - go-mongodb
 

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"ms-gateway/pkg/logging"
+	"ms-users/pkg/logging"
 	"time"
 )
 

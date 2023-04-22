@@ -2,7 +2,7 @@ package users
 
 import (
 	"context"
-	userDto "ms-gateway/internal/users/dto"
+	userDto "ms-users/internal/users/dto"
 )
 
 type Repository interface {

@@ -2,8 +2,8 @@ package users
 
 import (
 	"context"
-	userDto "ms-gateway/internal/users/dto"
-	"ms-gateway/pkg/logging"
+	userDto "ms-users/internal/users/dto"
+	"ms-users/pkg/logging"
 )
 
 type Service struct {

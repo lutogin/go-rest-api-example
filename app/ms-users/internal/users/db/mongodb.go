@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"log"
-	"ms-gateway/internal/users"
-	userDto "ms-gateway/internal/users/dto"
-	"ms-gateway/pkg/logging"
+	"ms-users/internal/users"
+	userDto "ms-users/internal/users/dto"
+	"ms-users/pkg/logging"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

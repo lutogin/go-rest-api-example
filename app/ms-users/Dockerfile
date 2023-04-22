@@ -15,7 +15,7 @@ COPY . .
 RUN go install github.com/cosmtrek/air@latest
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /ms-gateway
+RUN CGO_ENABLED=0 GOOS=linux go build -o /ms-users
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
@@ -25,4 +25,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /ms-gateway
 EXPOSE 8080
 
 # Run
-CMD ["/ms-gateway"]
+CMD ["/ms-users"]

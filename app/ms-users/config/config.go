@@ -1,7 +1,7 @@
 package config
 
 import (
-	"ms-gateway/pkg/logging"
+	"ms-users/pkg/logging"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"

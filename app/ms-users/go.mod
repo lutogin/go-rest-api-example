@@ -1,4 +1,4 @@
-module ms-gateway
+module ms-users
 
 go 1.20
 

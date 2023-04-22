@@ -3,7 +3,7 @@ package middlewares
 import (
 	"errors"
 	"github.com/julienschmidt/httprouter"
-	appErrors "ms-gateway/internal/app-errors"
+	appErrors "ms-users/internal/app-errors"
 	"net/http"
 )
 
