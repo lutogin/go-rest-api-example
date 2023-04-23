@@ -10,7 +10,7 @@ services:
       - "8181:8080"
       - "2345:2345"
     environment:
-      GOTRACEBACK: all
+      GOTRACEBACK: all # Flag for debug
     volumes:
       - ./app/ms-users:/app
 

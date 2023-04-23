@@ -9,10 +9,13 @@ import (
 
 type appHandler func(w http.ResponseWriter, r *http.Request, params httprouter.Params) error
 
-func Middleware(h appHandler) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func ErrorHandlingMiddleware(next appHandler) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		// Call the next handler in the chain and capture any error
+		err := next(w, r, p)
+
+		// If an error is returned, handle it accordingly
 		var appErr *appErrors.AppError
-		err := h(w, r, params)
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			if errors.As(err, &appErr) {
@@ -29,7 +32,7 @@ func Middleware(h appHandler) http.HandlerFunc {
 			}
 
 			w.WriteHeader(http.StatusTeapot)
-			w.Write(appErrors.SystemError(err).Marshal())
+			w.Write([]byte(err.Error()))
 		}
 	}
 }

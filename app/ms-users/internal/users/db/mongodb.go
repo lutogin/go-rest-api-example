@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	appErrors "ms-users/internal/app-errors"
 	"ms-users/internal/users"
 	userDto "ms-users/internal/users/dto"
 	"ms-users/pkg/logging"
@@ -42,7 +43,7 @@ func (d *db) GetById(ctx context.Context, payload userDto.GetUserByIdDto) (user 
 	result := d.collection.FindOne(ctx, filter)
 	if err = result.Err(); err != nil {
 		if errors.Is(result.Err(), mongo.ErrNoDocuments) {
-			return user, errors.New("not_found")
+			return user, appErrors.ErrNotFound
 		}
 		d.logger.Errorf("Error during looking for users by id: %s \n", payload.Id)
 		d.logger.Traceln(payload.Id)
@@ -54,7 +55,7 @@ func (d *db) GetById(ctx context.Context, payload userDto.GetUserByIdDto) (user 
 	return user, nil
 }
 
-func (d *db) GetByFilter(ctx context.Context, payload userDto.GetUsersDto) (user []users.UserEntity, err error) {
+func (d *db) GetByFilter(ctx context.Context, payload userDto.GetUsersDto) (foundUsers []users.UserEntity, err error) {
 	// Marshal the anonymous struct into BSON bytes
 	bsonBytes, err := bson.Marshal(payload)
 	if err != nil {
@@ -68,16 +69,32 @@ func (d *db) GetByFilter(ctx context.Context, payload userDto.GetUsersDto) (user
 		log.Fatal("Error unmarshaling BSON bytes:", err)
 	}
 
-	cursor, err := d.collection.Find(ctx, filter)
+	cur, err := d.collection.Find(ctx, filter)
 	if err != nil {
 		d.logger.Errorf("Error during looking for users by filter: %s /n", payload)
 		d.logger.Traceln(payload)
-		return user, err
+		return foundUsers, err
 	}
-	if err = cursor.Decode(&user); err != nil {
-		return user, err
+	defer cur.Close(ctx)
+
+	// Iterate over the cursor and decode the results into a User struct
+	for cur.Next(context.Background()) {
+		var user users.UserEntity
+
+		err := cur.Decode(&user)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		foundUsers = append(foundUsers, user)
 	}
-	return user, nil
+
+	// Check if there was an error in the cursor iteration
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return foundUsers, nil
 }
 
 func (d *db) Update(ctx context.Context, payload userDto.UpdateUserDto) (err error) {

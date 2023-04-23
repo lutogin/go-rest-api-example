@@ -1,7 +1,7 @@
 package usersDto
 
 type GetUsersDto struct {
-	Name  string `json:"name" bson:"name"`
-	Email string `json:"email" bson:"email" validate:"email"`
-	Phone string `json:"phone" bson:"phone"`
+	Name  string `json:"name" bson:"name,omitempty" validate:"omitempty"`
+	Email string `json:"email" bson:"email,omitempty" validate:"omitempty,email"`
+	Phone string `json:"phone" bson:"phone,omitempty"`
 }
