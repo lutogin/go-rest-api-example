@@ -25,8 +25,8 @@ type Config struct {
 
 type ConfigEnv struct {
 	IsDebug        bool   `yaml:"isDebug" env:"IS_DEBUG" env-default:"true"`
-	Host           string `yaml:"host" env:"HOST" env-default:"8181"`
-	Port           string `yaml:"port" env:"PORT" env-default:"127.0.0.1"`
+	Host           string `yaml:"host" env:"HOST" env-default:"127.0.0.1"`
+	Port           string `yaml:"port" env:"PORT" env-default:"8080"`
 	MongoHost      string `env:"MONGO_HOST"`
 	MongoPort      string `env:"MONGO_PORT"`
 	MongoUser      string `env:"MONGO_USER"`
