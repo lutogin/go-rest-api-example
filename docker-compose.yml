@@ -15,7 +15,7 @@ services:
       - ./app/ms-users:/app
 
     env_file:
-      - app/ms-users/.env.local
+      - .env.local
     depends_on:
       - go-mongodb
 
